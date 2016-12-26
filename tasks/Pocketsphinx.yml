@@ -1,0 +1,30 @@
+---
+- name: Download and extract Pocketsphinx source
+  unarchive:
+    remote_src: yes
+    src: "{{ pocketsphinx_download_src }}"
+    dest: "{{ ansible_user_dir }}"
+    creates: "{{ ansible_user_dir }}/pocketsphinx-5prealpha"
+
+- name: Generate configure file (Pocketsphinx)
+  command: ./autogen.sh
+  args:
+    chdir: "{{ ansible_user_dir }}/pocketsphinx-5prealpha"
+
+- name: Configure (Pocketsphinx)
+  command: ./configure
+  args:
+    chdir: "{{ ansible_user_dir }}/pocketsphinx-5prealpha"
+
+- name: Make (Pocketsphinx)
+  make:
+    chdir: "{{ ansible_user_dir }}/pocketsphinx-5prealpha"
+
+- name: Install (Pocketsphinx)
+  make:
+    chdir: "{{ ansible_user_dir }}/pocketsphinx-5prealpha"
+    target: install
+  become: yes
+  notify:
+    - "pocketsphinx vars"
+    - "delete pocketsphinx source"

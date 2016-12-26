@@ -1,0 +1,12 @@
+---
+- block:
+    - debug: msg="ensure pocketsphinx dependencies are installed"
+    - apt: pkg="gcc" state=present
+    - apt: pkg="autoconf" state=present
+    - apt: pkg="automake" state=present
+    - apt: pkg="libtool" state=present
+    - apt: pkg="bison" state=present
+    - apt: pkg="libpulse-dev" state=present
+    - apt: pkg="python-dev" state=present
+    - apt: pkg="swig" state=present
+  become: yes

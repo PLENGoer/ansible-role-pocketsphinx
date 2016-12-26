@@ -1,0 +1,22 @@
+---
+- name: Export environment variables pointing to installation
+  blockinfile:
+    dest: "$HOME/.bashrc"
+    content: |
+      export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
+      export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/lib/pkgconfig
+    marker: "# {mark} Pocketsphinx install location"
+    state: present
+  listen: "pocketsphinx vars"
+
+- name: Delete downloaded sources (Sphinxbase)
+  file:
+    path: "{{ ansible_user_dir }}/sphinxbase-5prealpha"
+    state: absent
+  listen: "delete sphinxbase source"
+
+- name: Delete downloaded sources (Pocketsphinx)
+  file:
+    path: "{{ ansible_user_dir }}/pocketsphinx-5prealpha"
+    state: absent
+  listen: "delete pocketsphinx source"

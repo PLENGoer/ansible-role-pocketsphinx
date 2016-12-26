@@ -1,0 +1,24 @@
+---
+- include: Dependencies.yml
+
+- name: Check Sphinxbase installation status
+  shell: pkg-config --exists sphinxbase --print-errors
+  register: sb_pkg_config_result
+  ignore_errors: yes
+
+- include: Sphinxbase.yml
+  when: sb_pkg_config_result.rc != 0
+
+- name: Check Pocketsphinx installation status
+  shell: pkg-config --exists pocketsphinx --print-errors
+  register: ps_pkg_config_result
+  ignore_errors: yes
+
+- include: Pocketsphinx.yml
+  when: ps_pkg_config_result.rc != 0
+
+- name: Python wrapper
+  pip:
+    name: pocketsphinx
+    state: present
+  become: yes

@@ -1,0 +1,30 @@
+---
+- name: Download and extract Sphinxbase source
+  unarchive:
+    remote_src: yes
+    src: "{{ pocketsphinx_sphinxbase_download_src }}"
+    dest: "{{ ansible_user_dir }}"
+    creates: "{{ ansible_user_dir }}/sphinxbase-5prealpha"
+
+- name: Generate configure file (Sphinxbase)
+  command: ./autogen.sh
+  args:
+    chdir: "{{ ansible_user_dir }}/sphinxbase-5prealpha"
+
+- name: Configure (Sphinxbase)
+  command: ./configure
+  args:
+    chdir: "{{ ansible_user_dir }}/sphinxbase-5prealpha"
+
+- name: Make (Sphinxbase)
+  make:
+    chdir: "{{ ansible_user_dir }}/sphinxbase-5prealpha"
+
+- name: Install (Sphinxbase)
+  make:
+    chdir: "{{ ansible_user_dir }}/sphinxbase-5prealpha"
+    target: install
+  become: yes
+  notify:
+    - "pocketsphinx vars"
+    - "delete sphinxbase source"
